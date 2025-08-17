@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobs App - Web Version</title>
+    <title>Jobs App - Your Job Search Platform</title>
     <style>
         * {
             margin: 0;
@@ -18,141 +18,244 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
         }
         
         .container {
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 3rem;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             text-align: center;
             max-width: 600px;
             width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .logo {
             width: 120px;
             height: 120px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
+            background: white;
+            border-radius: 60px;
+            margin: 0 auto 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 2rem;
-            color: white;
-            font-size: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .logo i {
+            font-size: 60px;
+            color: #667eea;
         }
         
         h1 {
-            color: #333;
+            font-size: 3rem;
+            font-weight: bold;
             margin-bottom: 1rem;
-            font-size: 2.5rem;
+            letter-spacing: 2px;
         }
         
         .subtitle {
-            color: #666;
-            margin-bottom: 2rem;
             font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
         
         .status {
-            background: #e8f5e8;
-            border: 1px solid #4caf50;
-            border-radius: 10px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
             padding: 1rem;
-            margin: 1rem 0;
-        }
-        
-        .status h3 {
-            color: #2e7d32;
-            margin-bottom: 0.5rem;
-        }
-        
-        .status p {
-            color: #388e3c;
+            border-radius: 10px;
+            margin-bottom: 2rem;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
         }
         
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            margin-top: 2rem;
+            margin-bottom: 2rem;
         }
         
         .feature {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .feature h4 {
-            color: #667eea;
+        .feature i {
+            font-size: 2rem;
             margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .feature h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
         }
         
         .feature p {
-            color: #666;
             font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
         }
         
         .deployment-info {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 10px;
-            padding: 1rem;
             margin-top: 2rem;
-        }
-        
-        .deployment-info h4 {
-            color: #856404;
-            margin-bottom: 0.5rem;
-        }
-        
-        .deployment-info p {
-            color: #856404;
+            padding: 1rem;
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid #FFC107;
+            border-radius: 10px;
             font-size: 0.9rem;
         }
+        
+        .deployment-info i {
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <div class="logo">💼</div>
+        <div class="logo">
+            <i class="fas fa-briefcase"></i>
+        </div>
+        
         <h1>Jobs App</h1>
         <p class="subtitle">Your job search and recruitment platform</p>
         
         <div class="status">
-            <h3>✅ Backend Status: Connected</h3>
-            <p>API Endpoint: http://98.84.239.161</p>
-            <p>Server: AWS EC2 with PostgreSQL</p>
+            <strong>Backend Status:</strong> Connected ✅<br>
+            <strong>API Endpoint:</strong> http://98.84.239.161<br>
+            <strong>Server:</strong> AWS EC2 with PostgreSQL
         </div>
         
         <div class="features">
             <div class="feature">
-                <h4>🔍 Job Search</h4>
+                <i class="fas fa-search"></i>
+                <h3>Job Search</h3>
                 <p>Find the perfect job opportunities</p>
             </div>
             <div class="feature">
-                <h4>👥 Recruitment</h4>
+                <i class="fas fa-users"></i>
+                <h3>Recruitment</h3>
                 <p>Hire talented professionals</p>
             </div>
             <div class="feature">
-                <h4>📱 Mobile App</h4>
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile App</h3>
                 <p>Available on Android & iOS</p>
             </div>
             <div class="feature">
-                <h4>☁️ Cloud Hosted</h4>
+                <i class="fas fa-cloud"></i>
+                <h3>Cloud Hosted</h3>
                 <p>Powered by AWS infrastructure</p>
             </div>
         </div>
         
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="showFeature('employee')">
+                <i class="fas fa-user"></i> I'm Looking for a Job
+            </button>
+            <button class="btn btn-secondary" onclick="showFeature('employer')">
+                <i class="fas fa-building"></i> I'm Hiring
+            </button>
+        </div>
+        
         <div class="deployment-info">
-            <h4>🚀 AWS Amplify Deployment</h4>
-            <p>This web version is deployed on AWS Amplify</p>
-            <p>Connected to your Django backend on EC2</p>
+            <i class="fas fa-rocket"></i>
+            <strong>AWS Amplify Deployment</strong><br>
+            This web version is deployed on AWS Amplify and connected to your Django backend on EC2
         </div>
     </div>
+
+    <script>
+        function showFeature(type) {
+            const message = type === 'employee' 
+                ? 'Employee registration and job search features are available in the full mobile app. This is the web preview version.'
+                : 'Employer registration and hiring features are available in the full mobile app. This is the web preview version.';
+            
+            alert(message);
+        }
+        
+        // Check backend connectivity
+        async function checkBackend() {
+            try {
+                const response = await fetch('http://98.84.239.161/health/', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                if (response.ok) {
+                    console.log('Backend is accessible');
+                }
+            } catch (error) {
+                console.log('Backend connectivity check failed:', error);
+            }
+        }
+        
+        // Check backend on page load
+        window.addEventListener('load', checkBackend);
+    </script>
 </body>
 </html>

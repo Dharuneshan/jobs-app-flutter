@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Web-specific initialization without Firebase
   if (kDebugMode) {
     print('Initializing Jobs App for Web - No Firebase');
   }
-  
+
   runApp(const MyApp());
 }
 
@@ -63,13 +63,14 @@ class _WebHomePageState extends State<WebHomePage> {
     setState(() {
       _isLoading = true;
     });
-    
+
     // Show a dialog for now
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Employee Registration'),
-        content: const Text('Employee registration feature will be available in the full mobile app. This is the web preview version.'),
+        content: const Text(
+            'Employee registration feature will be available in the full mobile app. This is the web preview version.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -89,13 +90,14 @@ class _WebHomePageState extends State<WebHomePage> {
     setState(() {
       _isLoading = true;
     });
-    
+
     // Show a dialog for now
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Employer Registration'),
-        content: const Text('Employer registration feature will be available in the full mobile app. This is the web preview version.'),
+        content: const Text(
+            'Employer registration feature will be available in the full mobile app. This is the web preview version.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -148,7 +150,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 ),
               ),
               const SizedBox(height: 40),
-              
+
               // App Title
               const Text(
                 'Jobs App',
@@ -160,7 +162,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              
+
               // Subtitle
               const Text(
                 'Your job search and recruitment platform',
@@ -172,10 +174,11 @@ class _WebHomePageState extends State<WebHomePage> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
-              
+
               // Backend Status
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.green.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(20),
@@ -191,7 +194,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 ),
               ),
               const SizedBox(height: 40),
-              
+
               // Buttons
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -202,7 +205,8 @@ class _WebHomePageState extends State<WebHomePage> {
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : _navigateToEmployeeRegister,
+                        onPressed:
+                            _isLoading ? null : _navigateToEmployeeRegister,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           foregroundColor: const Color(0xFF667eea),
@@ -217,7 +221,8 @@ class _WebHomePageState extends State<WebHomePage> {
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF667eea)),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Color(0xFF667eea)),
                                 ),
                               )
                             : const Text(
@@ -230,19 +235,21 @@ class _WebHomePageState extends State<WebHomePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
+
                     // Employer Button
                     SizedBox(
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : _navigateToEmployerRegister,
+                        onPressed:
+                            _isLoading ? null : _navigateToEmployerRegister,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(28),
-                            side: const BorderSide(color: Colors.white, width: 2),
+                            side:
+                                const BorderSide(color: Colors.white, width: 2),
                           ),
                           elevation: 0,
                         ),
@@ -252,7 +259,8 @@ class _WebHomePageState extends State<WebHomePage> {
                                 height: 24,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
                                 ),
                               )
                             : const Text(
@@ -268,10 +276,11 @@ class _WebHomePageState extends State<WebHomePage> {
                 ),
               ),
               const SizedBox(height: 40),
-              
+
               // Web indicator
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(20),
