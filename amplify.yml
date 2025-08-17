@@ -3,17 +3,22 @@ frontend:
   phases:
     preBuild:
       commands:
-        - echo "Setting up build environment for Jobs App..."
-        - echo "Using pre-built web files from repository"
+        - echo "Installing Flutter..."
+        - curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz
+        - tar xf flutter_linux_3.32.4-stable.tar.xz
+        - export PATH="$PATH:`pwd`/flutter/bin"
+        - flutter config --enable-web
+        - flutter doctor
+        - flutter --version
     build:
       commands:
-        - echo "Building web application..."
-        - echo "Web files are already in the repository"
-        - echo "No additional build steps required"
+        - echo "Building Flutter web app..."
+        - export PATH="$PATH:`pwd`/flutter/bin"
+        - flutter build web --release --target lib/main_web.dart --web-renderer html
   artifacts:
-    baseDirectory: web
+    baseDirectory: build/web
     files:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/*
+      - flutter/bin/cache/**/*
