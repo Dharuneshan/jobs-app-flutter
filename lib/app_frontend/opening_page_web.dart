@@ -1,114 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'employee_register_page.dart';
+import 'employer_register_page.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // Web-specific initialization without Firebase
-  if (kDebugMode) {
-    print('Initializing Jobs App for Web - No Firebase');
-  }
-  
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class OpeningPageWeb extends StatefulWidget {
+  const OpeningPageWeb({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Jobs App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const WebHomePage(),
-    );
-  }
+  State<OpeningPageWeb> createState() => _OpeningPageWebState();
 }
 
-class WebHomePage extends StatefulWidget {
-  const WebHomePage({super.key});
-
-  @override
-  State<WebHomePage> createState() => _WebHomePageState();
-}
-
-class _WebHomePageState extends State<WebHomePage> {
+class _OpeningPageWebState extends State<OpeningPageWeb> {
   bool _isLoading = false;
-  String _backendStatus = 'Checking...';
 
-  @override
-  void initState() {
-    super.initState();
-    _checkBackendStatus();
+  Future<String?> _getDeviceToken() async {
+    // Web version - return a placeholder token
+    if (kDebugMode) {
+      print('Web version: Using placeholder device token');
+    }
+    return 'web-device-token-placeholder';
   }
 
-  Future<void> _checkBackendStatus() async {
+  void _navigateToEmployeeRegister() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
-      // Simple backend connectivity check
-      setState(() {
-        _backendStatus = 'Connected to AWS EC2 Backend';
-      });
+      String? deviceToken = await _getDeviceToken();
+      
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmployeeRegisterPage(phoneNumber: ''),
+          ),
+        );
+      }
     } catch (e) {
-      setState(() {
-        _backendStatus = 'Backend connection failed';
-      });
+      if (kDebugMode) {
+        print('Error getting device token: $e');
+      }
+      // Continue without device token
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EmployeeRegisterPage(phoneNumber: ''),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
-  void _navigateToEmployeeRegister() {
+  void _navigateToEmployerRegister() async {
     setState(() {
       _isLoading = true;
     });
-    
-    // Show a dialog for now
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Employee Registration'),
-        content: const Text('Employee registration feature will be available in the full mobile app. This is the web preview version.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _isLoading = false;
-              });
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
 
-  void _navigateToEmployerRegister() {
-    setState(() {
-      _isLoading = true;
-    });
-    
-    // Show a dialog for now
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Employer Registration'),
-        content: const Text('Employer registration feature will be available in the full mobile app. This is the web preview version.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _isLoading = false;
-              });
-            },
-            child: const Text('OK'),
+    try {
+      String? deviceToken = await _getDeviceToken();
+      
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmployerRegisterPage(phoneNumber: ''),
           ),
-        ],
-      ),
-    );
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error getting device token: $e');
+      }
+      // Continue without device token
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const EmployerRegisterPage(phoneNumber: ''),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -171,26 +157,7 @@ class _WebHomePageState extends State<WebHomePage> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 40),
-              
-              // Backend Status
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.green, width: 1),
-                ),
-                child: Text(
-                  _backendStatus,
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 60),
               
               // Buttons
               Padding(
@@ -277,7 +244,7 @@ class _WebHomePageState extends State<WebHomePage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
-                  'Web Version - Deployed on AWS Amplify',
+                  'Web Version - Connected to AWS Backend',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
