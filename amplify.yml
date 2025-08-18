@@ -4,8 +4,8 @@ frontend:
     preBuild:
       commands:
         - 'echo "Setting up Flutter environment..."'
-        - sudo apt-get update -y
-        - sudo apt-get install -y curl unzip xz-utils zip libglu1-mesa
+        - sudo yum update -y
+        - sudo yum install -y curl unzip xz
         - 'echo "Downloading Flutter..."'
         - curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz
         - 'echo "Extracting Flutter..."'
@@ -13,7 +13,7 @@ frontend:
         - export PATH="$PATH:`pwd`/flutter/bin"
         - 'echo "Configuring Flutter..."'
         - flutter config --enable-web --no-analytics
-        - flutter doctor -v
+        - flutter doctor
         - 'echo "Flutter version:"'
         - flutter --version
     build:
@@ -26,7 +26,7 @@ frontend:
         - 'echo "Checking if main_web.dart exists:"'
         - ls -la lib/main_web.dart
         - 'echo "Running Flutter build..."'
-        - flutter build web --release --target lib/main_web.dart --web-renderer html --dart-define=FLUTTER_WEB_USE_SKIA=true
+        - flutter build web --release --target lib/main_web.dart
         - 'echo "Build completed. Checking output:"'
         - ls -la build/web/
   artifacts:
