@@ -15,96 +15,25 @@ import 'app_frontend/employee_applied_page.dart';
 import 'app_frontend/providers/applied_jobs_provider.dart';
 import 'app_frontend/providers/liked_jobs_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'firebase_options.dart';
+import 'firebase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    // Initialize Firebase for both web and mobile
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    // Initialize Firebase using the service
+    await FirebaseService.initialize();
 
-    // Only setup FCM for mobile platforms (not web)
-    if (!kIsWeb) {
-      await _setupFCM();
-    }
+    // Setup messaging only for mobile platforms
+    await FirebaseService.setupMessaging();
   } catch (e) {
     if (kDebugMode) {
-      print('Firebase initialization failed: $e');
+      print('Firebase setup failed: $e');
     }
     // Continue without Firebase if initialization fails
   }
 
   runApp(const MyApp());
-}
-
-Future<void> _setupFCM() async {
-  try {
-    // Request permissions (especially for iOS)
-    await FirebaseMessaging.instance.requestPermission();
-    // Get the device token
-    String? deviceToken = await FirebaseMessaging.instance.getToken();
-    if (kDebugMode) {
-      print('FCM Device Token: ${deviceToken ?? 'null'}');
-    }
-    // Setup local notifications
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    // Listen for foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (kDebugMode) {
-        print('Received a foreground message: \\${message.toMap()}');
-      }
-      // Show local notification for both notification and data-only messages
-      if (message.notification != null || message.data.isNotEmpty) {
-        final notification = message.notification;
-        final title =
-            notification?.title ?? message.data['title'] ?? 'Notification';
-        final body = notification?.body ??
-            message.data['body'] ??
-            'You have a new message';
-        flutterLocalNotificationsPlugin.show(
-          notification?.hashCode ?? message.data.hashCode,
-          title,
-          body,
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'default_channel',
-              'Default',
-              channelDescription: 'Default channel for notifications',
-              importance: Importance.max,
-              priority: Priority.high,
-            ),
-          ),
-        );
-      }
-      // Optionally, trigger a refresh of the notification list if on NotificationPage
-      // (You may need to use a global key or a state management solution for this)
-    });
-    // Listen for when the app is opened from a notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (kDebugMode) {
-        print('Notification clicked!');
-      }
-      // Handle navigation or UI update here
-    });
-  } catch (e) {
-    if (kDebugMode) {
-      print('FCM setup failed: $e');
-    }
-    // Continue without FCM if setup fails
-  }
 }
 
 class MyApp extends StatelessWidget {

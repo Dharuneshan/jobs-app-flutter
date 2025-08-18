@@ -31,9 +31,9 @@ frontend:
         - 'echo "Flutter path: $(which flutter)"'
         - 'echo "=== VERIFYING SOURCE FILES ==="'
         - ls -la lib/ || exit 1
-        - ls -la lib/main_web.dart || exit 1
+        - ls -la lib/main_web_minimal.dart || exit 1
         - 'echo "=== STARTING FLUTTER BUILD ==="'
-        - flutter build web --release --target lib/main_web.dart --verbose || exit 1
+        - flutter build web --release --target lib/main_web_minimal.dart --verbose || exit 1
         - 'echo "=== BUILD COMPLETED SUCCESSFULLY ==="'
         - 'echo "Build output directory:"'
         - ls -la build/web/ || exit 1
