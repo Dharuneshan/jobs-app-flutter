@@ -5,7 +5,10 @@ frontend:
       commands:
         - 'echo "Setting up Flutter environment..."'
         - sudo yum update -y || true
-        - sudo yum install -y curl unzip xz || true
+        - sudo yum install -y curl unzip xz --allowerasing || true
+        - 'echo "Verifying xz installation..."'
+        - xz --version || echo "xz not found, trying alternative installation"
+        - sudo yum install -y xz-utils || sudo yum install -y xz || true
         - 'echo "Downloading Flutter..."'
         - curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz || exit 1
         - 'echo "Extracting Flutter..."'
