@@ -15,25 +15,24 @@ frontend:
         - tar xf flutter_linux_3.32.4-stable.tar.xz || exit 1
         - export PATH="$PATH:`pwd`/flutter/bin"
         - 'echo "Configuring Flutter..."'
-        - flutter config --enable-web --no-analytics || true
-        - flutter doctor || true
+        - flutter config --enable-web --no-analytics || exit 1
+        - flutter doctor || exit 1
         - 'echo "Flutter version:"'
-        - flutter --version || true
+        - flutter --version || exit 1
     build:
       commands:
         - 'echo "Building Flutter web app..."'
         - export PATH="$PATH:`pwd`/flutter/bin"
         - 'echo "Current directory: $(pwd)"'
         - 'echo "Listing files:"'
-        - ls -la || true
+        - ls -la || exit 1
         - 'echo "Checking if main_web.dart exists:"'
-        - ls -la lib/main_web.dart || echo "main_web.dart not found, using HTML fallback"
+        - ls -la lib/main_web.dart || exit 1
         - 'echo "Attempting Flutter build..."'
-        - flutter build web --release --target lib/main_web.dart || echo "Flutter build failed, using HTML fallback"
+        - flutter build web --release --target lib/main_web.dart || exit 1
         - 'echo "Build completed. Checking output:"'
-        - ls -la build/web/ || echo "build/web not found, using HTML fallback"
-        - 'echo "Copying HTML fallback if needed..."'
-        - cp -r web/* build/web/ 2>/dev/null || echo "HTML fallback copy failed"
+        - ls -la build/web/ || exit 1
+        - 'echo "Flutter build successful!"'
   artifacts:
     baseDirectory: build/web
     files:
