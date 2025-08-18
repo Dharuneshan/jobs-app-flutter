@@ -9,12 +9,12 @@ import 'app_frontend/providers/liked_jobs_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Web-specific initialization without Firebase
   if (kDebugMode) {
     print('Initializing Jobs App for Web - Using Real App');
   }
-  
+
   runApp(const MyApp());
 }
 
@@ -27,9 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => AppliedJobsProvider(
-            employeeId: 1, 
-            baseUrl: 'http://98.84.239.161'
-          ),
+              employeeId: 1, baseUrl: 'http://98.84.239.161'),
         ),
         ChangeNotifierProvider(
           create: (_) => LikedJobsProvider(employeeId: 1),

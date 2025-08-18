@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,24 +103,24 @@ class _OpeningPageWebState extends State<OpeningPageWeb> {
             arguments: {'employeeId': employeeId},
           );
           return;
-                 } else if (regType == 'employer') {
-           if (kDebugMode) {
-             print(
-                 'DEBUG: Found employer registration, redirecting to employer dashboard');
-           }
-           // Register device token
-           final deviceToken = await getDeviceToken();
-           if (deviceToken != null) {
-             await updateDeviceToken(phoneNumber, deviceToken, true);
-           }
-           // ignore: use_build_context_synchronously
-           Navigator.pushReplacementNamed(
-             // ignore: use_build_context_synchronously
-             context,
-             '/employer-dashboard',
-             arguments: {'phoneNumber': phoneNumber},
-           );
-           return;
+        } else if (regType == 'employer') {
+          if (kDebugMode) {
+            print(
+                'DEBUG: Found employer registration, redirecting to employer dashboard');
+          }
+          // Register device token
+          final deviceToken = await getDeviceToken();
+          if (deviceToken != null) {
+            await updateDeviceToken(phoneNumber, deviceToken, true);
+          }
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacementNamed(
+            // ignore: use_build_context_synchronously
+            context,
+            '/employer-dashboard',
+            arguments: {'phoneNumber': phoneNumber},
+          );
+          return;
         } else {
           if (kDebugMode) {
             print('DEBUG: No registration found, redirecting to choose role');
@@ -271,7 +271,8 @@ class _OpeningPageWebState extends State<OpeningPageWeb> {
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.white),
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -317,8 +318,9 @@ class _OpeningPageWebState extends State<OpeningPageWeb> {
                                       height: 24,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                            Color(0xFF667eea)),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Color(0xFF667eea)),
                                       ),
                                     )
                                   : const Text(
@@ -338,7 +340,8 @@ class _OpeningPageWebState extends State<OpeningPageWeb> {
 
                   // Web indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
