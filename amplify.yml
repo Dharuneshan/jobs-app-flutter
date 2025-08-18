@@ -3,36 +3,41 @@ frontend:
   phases:
     preBuild:
       commands:
-        - 'echo "Setting up Flutter environment..."'
+        - 'echo "=== FLUTTER WEB BUILD STARTING ==="'
+        - 'echo "Current directory: $(pwd)"'
+        - 'echo "Listing all files:"'
+        - ls -la
+        - 'echo "=== INSTALLING SYSTEM DEPENDENCIES ==="'
         - sudo yum update -y || true
         - sudo yum install -y curl unzip xz --allowerasing || true
-        - 'echo "Verifying xz installation..."'
-        - xz --version || echo "xz not found, trying alternative installation"
-        - sudo yum install -y xz-utils || sudo yum install -y xz || true
-        - 'echo "Downloading Flutter..."'
+        - 'echo "=== VERIFYING XZ UTILITY ==="'
+        - xz --version || echo "xz not found, installing..."
+        - sudo yum install -y xz-utils || sudo yum install -y xz || exit 1
+        - 'echo "=== DOWNLOADING FLUTTER ==="'
         - curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz || exit 1
-        - 'echo "Extracting Flutter..."'
+        - 'echo "=== EXTRACTING FLUTTER ==="'
         - tar xf flutter_linux_3.32.4-stable.tar.xz || exit 1
         - export PATH="$PATH:`pwd`/flutter/bin"
-        - 'echo "Configuring Flutter..."'
+        - 'echo "=== CONFIGURING FLUTTER ==="'
         - flutter config --enable-web --no-analytics || exit 1
         - flutter doctor || exit 1
-        - 'echo "Flutter version:"'
+        - 'echo "=== FLUTTER VERSION ==="'
         - flutter --version || exit 1
     build:
       commands:
-        - 'echo "Building Flutter web app..."'
+        - 'echo "=== BUILDING FLUTTER WEB APP ==="'
         - export PATH="$PATH:`pwd`/flutter/bin"
         - 'echo "Current directory: $(pwd)"'
-        - 'echo "Listing files:"'
-        - ls -la || exit 1
-        - 'echo "Checking if main_web.dart exists:"'
+        - 'echo "Flutter path: $(which flutter)"'
+        - 'echo "=== VERIFYING SOURCE FILES ==="'
+        - ls -la lib/ || exit 1
         - ls -la lib/main_web.dart || exit 1
-        - 'echo "Attempting Flutter build..."'
-        - flutter build web --release --target lib/main_web.dart || exit 1
-        - 'echo "Build completed. Checking output:"'
+        - 'echo "=== STARTING FLUTTER BUILD ==="'
+        - flutter build web --release --target lib/main_web.dart --verbose || exit 1
+        - 'echo "=== BUILD COMPLETED SUCCESSFULLY ==="'
+        - 'echo "Build output directory:"'
         - ls -la build/web/ || exit 1
-        - 'echo "Flutter build successful!"'
+        - 'echo "=== FLUTTER BUILD SUCCESSFUL! ==="'
   artifacts:
     baseDirectory: build/web
     files:

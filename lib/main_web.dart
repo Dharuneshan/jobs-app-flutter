@@ -62,7 +62,7 @@ class _WebHomePageState extends State<WebHomePage> {
         setState(() {
           _isLoading = false;
         });
-        
+
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -181,7 +181,8 @@ class _WebHomePageState extends State<WebHomePage> {
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Colors.white),
+                                borderSide:
+                                    const BorderSide(color: Colors.white),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -227,8 +228,9 @@ class _WebHomePageState extends State<WebHomePage> {
                                       height: 24,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                            Color(0xFF667eea)),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Color(0xFF667eea)),
                                       ),
                                     )
                                   : const Text(
@@ -248,7 +250,8 @@ class _WebHomePageState extends State<WebHomePage> {
 
                   // Status indicator
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
