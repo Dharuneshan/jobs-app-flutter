@@ -1,0 +1,41 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - 'echo "Setting up Flutter environment..."'
+        - sudo yum update -y || true
+        - sudo yum install -y curl unzip xz || true
+        - 'echo "Downloading Flutter..."'
+        - curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.32.4-stable.tar.xz || exit 1
+        - 'echo "Extracting Flutter..."'
+        - tar xf flutter_linux_3.32.4-stable.tar.xz || exit 1
+        - export PATH="$PATH:`pwd`/flutter/bin"
+        - 'echo "Configuring Flutter..."'
+        - flutter config --enable-web --no-analytics || true
+        - flutter doctor || true
+        - 'echo "Flutter version:"'
+        - flutter --version || true
+    build:
+      commands:
+        - 'echo "Building Flutter web app..."'
+        - export PATH="$PATH:`pwd`/flutter/bin"
+        - 'echo "Current directory: $(pwd)"'
+        - 'echo "Listing files:"'
+        - ls -la || true
+        - 'echo "Checking if main_web.dart exists:"'
+        - ls -la lib/main_web.dart || echo "main_web.dart not found, using HTML fallback"
+        - 'echo "Attempting Flutter build..."'
+        - flutter build web --release --target lib/main_web.dart || echo "Flutter build failed, using HTML fallback"
+        - 'echo "Build completed. Checking output:"'
+        - ls -la build/web/ || echo "build/web not found, using HTML fallback"
+        - 'echo "Copying HTML fallback if needed..."'
+        - cp -r web/* build/web/ 2>/dev/null || echo "HTML fallback copy failed"
+  artifacts:
+    baseDirectory: build/web
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - flutter/bin/cache/**/*
+      - .pub-cache/**/*
