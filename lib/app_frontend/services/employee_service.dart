@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../../services/api_service.dart';
-import 'dart:io';
+import '../../services/upload_service.dart';
 
 class EmployeeService {
   static final EmployeeService _instance = EmployeeService._internal();
@@ -27,7 +27,7 @@ class EmployeeService {
     required String degree,
     required String jobLocation,
     required bool physicallyChallenged,
-    File? photoFile,
+    dynamic photoFile,
     double? latitude,
     double? longitude,
     String? address,
@@ -67,8 +67,10 @@ class EmployeeService {
         print("DEBUG: Calling _apiService.registerEmployee");
       }
 
-      final response = await _apiService.registerEmployee(employeeData,
-          photoFile: photoFile);
+      final response = await UploadService().uploadEmployeeRegistration(
+        employeeData: employeeData,
+        photoFile: photoFile,
+      );
 
       if (kDebugMode) {
         print("DEBUG: EmployeeService received response: $response");
@@ -117,7 +119,7 @@ class EmployeeService {
     required String degree,
     required String jobLocation,
     required bool physicallyChallenged,
-    File? photoFile,
+    dynamic photoFile,
   }) async {
     try {
       if (kDebugMode) {
@@ -188,7 +190,7 @@ class EmployerService {
     required String disabilityHiring,
     required String district,
     required String taluk,
-    File? photoFile,
+    dynamic photoFile,
     double? latitude,
     double? longitude,
     String? address,
@@ -214,8 +216,10 @@ class EmployerService {
       if (kDebugMode) {
         print("DEBUG: EmployerService employerData: $employerData");
       }
-      final response = await _apiService.registerEmployer(employerData,
-          photoFile: photoFile);
+      final response = await UploadService().uploadEmployerRegistration(
+        employerData: employerData,
+        photoFile: photoFile,
+      );
       return response;
     } catch (e) {
       rethrow;

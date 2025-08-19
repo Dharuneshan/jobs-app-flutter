@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 // ignore: unused_import
 import '../config/api_config.dart';
 
 // Conditional imports for platform-specific functionality
-// ignore: unused_import
 import 'dart:io' if (dart.library.html) 'dart:html' as platform;
+import 'dart:typed_data';
 
 class ApiService {
   final String baseUrl;
@@ -49,7 +48,7 @@ class ApiService {
   // Employee Registration endpoints
   Future<Map<String, dynamic>> registerEmployee(
       Map<String, dynamic> employeeData,
-      {File? photoFile}) async {
+      {dynamic photoFile}) async {
     try {
       if (kDebugMode) {
         print("DEBUG: ApiService.registerEmployee started");

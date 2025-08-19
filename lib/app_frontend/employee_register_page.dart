@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'services/employee_service.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -23,7 +23,7 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
   int _currentStep = 0;
   final Map<String, dynamic> _answers = {};
   final TextEditingController _nameController = TextEditingController();
-  File? _photoFile;
+  dynamic _photoFile;
 
   // Static data for dropdowns
   final List<String> _districts = [
@@ -912,7 +912,7 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _photoFile = File(pickedFile.path);
+        _photoFile = pickedFile;
       });
     }
   }

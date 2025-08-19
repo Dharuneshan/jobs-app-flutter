@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'services/employee_service.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -91,7 +91,7 @@ class _EmployerRegisterPageState extends State<EmployerRegisterPage> {
   String? _selectedTaluk;
 
   bool _isSubmitting = false;
-  File? _photoFile;
+  dynamic _photoFile;
   double? _selectedLatitude;
   double? _selectedLongitude;
   String? _selectedAddress;
@@ -120,7 +120,7 @@ class _EmployerRegisterPageState extends State<EmployerRegisterPage> {
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        _photoFile = File(pickedFile.path);
+        _photoFile = pickedFile;
       });
     }
   }
@@ -144,8 +144,11 @@ class _EmployerRegisterPageState extends State<EmployerRegisterPage> {
           CircleAvatar(
             radius: 50,
             backgroundColor: const Color(0xFFF7F8FA),
-            backgroundImage:
-                (_photoFile != null) ? FileImage(_photoFile!) : null,
+            backgroundImage: (_photoFile != null) 
+                ? (kIsWeb 
+                    ? NetworkImage(_photoFile!.path) 
+                    : FileImage(_photoFile!)) as ImageProvider
+                : null,
             child: (_photoFile == null)
                 ? const Icon(Icons.person, size: 50, color: Color(0xFF0044CC))
                 : null,

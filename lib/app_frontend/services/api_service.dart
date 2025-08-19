@@ -12,9 +12,8 @@ class APIService {
   final String baseUrl;
 
   APIService({String? baseUrl})
-      : baseUrl = baseUrl ?? (kIsWeb
-            ? '${ApiConfig.baseUrl}/api'
-            : 'http://10.0.2.2:8000/api');
+      : baseUrl = baseUrl ??
+            (kIsWeb ? '${ApiConfig.baseUrl}/api' : 'http://10.0.2.2:8000/api');
 
   // Factory constructor that automatically uses the correct baseUrl
   factory APIService.create() {
