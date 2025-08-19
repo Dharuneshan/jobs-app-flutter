@@ -4,11 +4,11 @@ class ApiConfig {
   // Base URL for API calls
   static String get baseUrl {
     if (kIsWeb) {
-      // Web environment - use EC2 Elastic IP over HTTPS
-      return 'https://98.84.239.161';
+      // Web environment - use No-IP domain over HTTPS
+      return 'https://myjobsapi.ddns.net';
     } else {
       // Mobile environment - same for now; can be different per env
-      return 'https://98.84.239.161';
+      return 'https://myjobsapi.ddns.net';
     }
   }
 

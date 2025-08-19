@@ -30,7 +30,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.0.2.2', '98.84.239.161']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.0.2.2', '98.84.239.161', 'myjobsapi.ddns.net']
 
 
 # Application definition
@@ -77,6 +77,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://10.0.2.2:8000",
     "https://*.amplifyapp.com",
     "https://98.84.239.161",
+    "https://myjobsapi.ddns.net",
 ]
 
 ROOT_URLCONF = 'core.urls'
