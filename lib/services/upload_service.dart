@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import '../config/api_config.dart';
+
+// Conditional imports for platform-specific functionality
+import 'dart:io' if (dart.library.html) 'dart:html' as platform;
 
 class UploadService {
   static final UploadService _instance = UploadService._internal();
@@ -47,33 +51,7 @@ class UploadService {
         }
       }
 
-      // For now, skip file upload on web and just send the data
-      // This is a temporary fix until we implement proper web file handling
-      if (kIsWeb) {
-        if (kDebugMode) {
-          print("DEBUG: Web platform detected, skipping file upload for now");
-        }
-        
-        // Send JSON request without file
-        final response = await http.post(
-          Uri.parse('${ApiConfig.baseUrl}/api$endpoint'),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode(data),
-        );
-
-        if (kDebugMode) {
-          print("DEBUG: Web JSON response status: ${response.statusCode}");
-          print("DEBUG: Web JSON response body: ${response.body}");
-        }
-
-        if (response.statusCode == 201 || response.statusCode == 200) {
-          return json.decode(response.body);
-        } else {
-          throw Exception('Failed to upload: ${response.body}');
-        }
-      }
-
-      // Mobile platform - handle file upload
+      // Create multipart request
       var request = http.MultipartRequest(
         "POST",
         Uri.parse('${ApiConfig.baseUrl}/api$endpoint'),
@@ -88,19 +66,54 @@ class UploadService {
         print("DEBUG: Multipart request fields: ${request.fields}");
       }
 
-      // Add the file for mobile
-      if (file != null) {
-        // This will work for mobile platforms
-        try {
-          request.files.add(
-            await http.MultipartFile.fromPath(
-              fileFieldName,
-              file.path,
-            ),
-          );
-        } catch (e) {
-          if (kDebugMode) {
-            print("DEBUG: File upload failed, sending without file: $e");
+      // Add the file based on platform
+      if (kIsWeb) {
+        // Web platform - handle web file
+        if (file != null) {
+          try {
+            // For web, we need to convert the XFile to bytes
+            final bytes = await file.readAsBytes();
+            request.files.add(
+              http.MultipartFile.fromBytes(
+                fileFieldName,
+                bytes,
+                filename: file.name,
+              ),
+            );
+            if (kDebugMode) {
+              print("DEBUG: Added web file: ${file.name} with ${bytes.length} bytes");
+            }
+          } catch (e) {
+            if (kDebugMode) {
+              print("DEBUG: Error processing web file: $e");
+            }
+            // Fallback to JSON request if file processing fails
+            final response = await http.post(
+              Uri.parse('${ApiConfig.baseUrl}/api$endpoint'),
+              headers: {'Content-Type': 'application/json'},
+              body: json.encode(data),
+            );
+            if (response.statusCode == 201 || response.statusCode == 200) {
+              return json.decode(response.body);
+            } else {
+              throw Exception('Failed to upload: ${response.body}');
+            }
+          }
+        }
+      } else {
+        // Mobile platform - handle mobile file
+        if (file != null) {
+          try {
+            request.files.add(
+              await http.MultipartFile.fromPath(
+                fileFieldName,
+                file.path,
+              ),
+            );
+          } catch (e) {
+            if (kDebugMode) {
+              print("DEBUG: File upload failed, sending without file: $e");
+            }
           }
         }
       }
@@ -162,13 +175,45 @@ class UploadService {
   Future<String> uploadEmployeePhoto(dynamic photoFile) async {
     try {
       if (kIsWeb) {
-        // For web, return a placeholder URL for now
-        if (kDebugMode) {
-          print("DEBUG: Web platform detected, returning placeholder photo URL");
+        // For web, handle file upload properly
+        if (photoFile != null) {
+          try {
+            final bytes = await photoFile.readAsBytes();
+            var request = http.MultipartRequest(
+              "POST",
+              Uri.parse('${ApiConfig.baseUrl}/api/upload-employee-photo/'),
+            );
+            
+            request.files.add(
+              http.MultipartFile.fromBytes(
+                'photo',
+                bytes,
+                filename: photoFile.name,
+              ),
+            );
+
+            var streamedResponse = await request.send();
+            var response = await http.Response.fromStream(streamedResponse);
+
+            if (response.statusCode == 201) {
+              final data = json.decode(response.body);
+              return data['photo_url'];
+            } else {
+              throw Exception('Failed to upload photo: ${response.body}');
+            }
+          } catch (e) {
+            if (kDebugMode) {
+              print("DEBUG: Web photo upload failed: $e");
+            }
+            // Return a placeholder URL for web if upload fails
+            return 'https://via.placeholder.com/150x150?text=Photo+Uploaded';
+          }
+        } else {
+          return 'https://via.placeholder.com/150x150?text=No+Photo';
         }
-        return 'https://via.placeholder.com/150x150?text=Photo+Uploaded';
       }
 
+      // Mobile platform
       var request = http.MultipartRequest(
         "POST",
         Uri.parse('${ApiConfig.baseUrl}/api/upload-employee-photo/'),

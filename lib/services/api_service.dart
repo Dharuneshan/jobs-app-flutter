@@ -194,7 +194,7 @@ class ApiService {
   // Employer Registration endpoints
   Future<Map<String, dynamic>> registerEmployer(
       Map<String, dynamic> employerData,
-      {File? photoFile}) async {
+      {dynamic photoFile}) async {
     try {
       if (photoFile != null) {
         // Use multipart request for file upload
@@ -310,7 +310,7 @@ class ApiService {
   Future<Map<String, dynamic>> updateEmployer(
     String phoneNumber, // or use employer id if available
     Map<String, dynamic> employerData, {
-    File? photoFile,
+    dynamic photoFile,
   }) async {
     try {
       final url = Uri.parse(
@@ -350,7 +350,7 @@ class ApiService {
   Future<Map<String, dynamic>> updateEmployerById(
     int employerId,
     Map<String, dynamic> employerData, {
-    File? photoFile,
+    dynamic photoFile,
   }) async {
     final url = Uri.parse('$baseUrl/employer-registrations/$employerId/');
     if (photoFile != null) {
@@ -427,7 +427,7 @@ class ApiService {
 
   // Job Post endpoints
   Future<Map<String, dynamic>> createJobPost(Map<String, dynamic> jobData,
-      {File? jobVideo}) async {
+      {dynamic jobVideo}) async {
     try {
       if (jobVideo != null) {
         var request = http.MultipartRequest(
@@ -536,7 +536,7 @@ class ApiService {
 
   Future<Map<String, dynamic>> updateJobPost(
       int id, Map<String, dynamic> jobData,
-      {File? jobVideo}) async {
+      {dynamic jobVideo}) async {
     final url = Uri.parse('$baseUrl/job-posts/$id/');
     if (jobVideo != null) {
       var request = http.MultipartRequest('PATCH', url);
@@ -829,7 +829,7 @@ class ApiService {
   }
 
   // Upload employee photo and return the URL
-  Future<String> uploadEmployeePhoto(File photoFile) async {
+  Future<String> uploadEmployeePhoto(dynamic photoFile) async {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse('$baseUrl/upload-employee-photo/'),
@@ -849,7 +849,7 @@ class ApiService {
   Future<Map<String, dynamic>> updateEmployeeById(
     int employeeId,
     Map<String, dynamic> employeeData, {
-    File? photoFile,
+    dynamic photoFile,
   }) async {
     final url = Uri.parse('$baseUrl/employee-registrations/$employeeId/');
     if (photoFile != null) {
