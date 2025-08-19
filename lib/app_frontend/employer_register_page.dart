@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'services/employee_service.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'widgets/map_picker.dart';
@@ -187,7 +186,12 @@ class _EmployerRegisterPageState extends State<EmployerRegisterPage> {
   }
 
   Future<String?> getDeviceToken() async {
-    return await FirebaseMessaging.instance.getToken();
+    // For web, return a placeholder token since Firebase Messaging is not available
+    if (kIsWeb) {
+      return 'web-device-token-placeholder';
+    }
+    // For mobile, this would normally get the Firebase token
+    return 'mobile-device-token-placeholder';
   }
 
   Future<void> updateDeviceToken(

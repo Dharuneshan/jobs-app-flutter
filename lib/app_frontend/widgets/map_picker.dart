@@ -41,6 +41,7 @@ class _MapPickerState extends State<MapPicker> {
   double? longitude;
   String? address;
   bool isLoading = false;
+  bool mapLoadError = false;
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -52,7 +53,9 @@ class _MapPickerState extends State<MapPicker> {
     if (address == null && latitude != null && longitude != null) {
       _reverseGeocode(latitude!, longitude!);
     }
-    requestLocationPermission();
+    if (!kIsWeb) {
+      requestLocationPermission();
+    }
   }
 
   Future<void> _geocode(String query) async {
@@ -116,6 +119,9 @@ class _MapPickerState extends State<MapPicker> {
   // ignore: deprecated_member_use
   void _onMapCreated(MaplibreMapController controller) {
     mapController = controller;
+    setState(() {
+      mapLoadError = false;
+    });
   }
 
   void _onMapTap(Point<double> point, LatLng latLng) {
@@ -129,6 +135,12 @@ class _MapPickerState extends State<MapPicker> {
     _reverseGeocode(latLng.latitude, latLng.longitude);
   }
 
+  void _onMapError() {
+    setState(() {
+      mapLoadError = true;
+    });
+  }
+
   Future<void> requestLocationPermission() async {
     var status = await Permission.location.request();
     if (!status.isGranted) {
@@ -136,6 +148,79 @@ class _MapPickerState extends State<MapPicker> {
         const SnackBar(
             content: Text('Location permission is required to use the map.')),
       );
+    }
+  }
+
+  Widget _buildMapWidget() {
+    if (kIsWeb && mapLoadError) {
+      // Web fallback when MapLibre fails
+      return Container(
+        height: 300,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.map, size: 48, color: Colors.grey),
+            const SizedBox(height: 16),
+            const Text(
+              'Map not available on web',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Please use the search field above to set location',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
+    try {
+      return SizedBox(
+        height: 300,
+        child: Stack(
+          children: [
+            // ignore: deprecated_member_use
+            MaplibreMap(
+              styleString: mapboxStyleUrl,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(latitude ?? 12.9716, longitude ?? 77.5946),
+                zoom: 14,
+              ),
+              onMapCreated: _onMapCreated,
+              onMapClick: _onMapTap,
+              myLocationEnabled: !kIsWeb,
+              myLocationTrackingMode: MyLocationTrackingMode.tracking,
+              onStyleLoadedCallback: () {
+                if (kDebugMode) {
+                  print('Map style loaded successfully');
+                }
+              },
+            ),
+            if (latitude != null && longitude != null)
+              const IgnorePointer(
+                child: Center(
+                  child:
+                      Icon(Icons.location_pin, size: 48, color: Colors.red),
+                ),
+              ),
+            if (isLoading) const Center(child: CircularProgressIndicator()),
+          ],
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error creating map: $e');
+      }
+      setState(() {
+        mapLoadError = true;
+      });
+      return _buildMapWidget(); // Recursive call to show fallback
     }
   }
 
@@ -164,33 +249,7 @@ class _MapPickerState extends State<MapPicker> {
           },
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          height: 300,
-          child: Stack(
-            children: [
-              // ignore: deprecated_member_use
-              MaplibreMap(
-                styleString: mapboxStyleUrl,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(latitude ?? 12.9716, longitude ?? 77.5946),
-                  zoom: 14,
-                ),
-                onMapCreated: _onMapCreated,
-                onMapClick: _onMapTap,
-                myLocationEnabled: true,
-                myLocationTrackingMode: MyLocationTrackingMode.tracking,
-              ),
-              if (latitude != null && longitude != null)
-                const IgnorePointer(
-                  child: Center(
-                    child:
-                        Icon(Icons.location_pin, size: 48, color: Colors.red),
-                  ),
-                ),
-              if (isLoading) const Center(child: CircularProgressIndicator()),
-            ],
-          ),
-        ),
+        _buildMapWidget(),
         const SizedBox(height: 10),
         Text(
           address != null
@@ -199,14 +258,18 @@ class _MapPickerState extends State<MapPicker> {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
-        ElevatedButton.icon(
-          icon: const Icon(Icons.check),
-          label: const Text('Use this location'),
-          onPressed: (latitude != null && longitude != null && address != null)
-              ? () {
+        Row(
+          children: [
+            Checkbox(
+              value: address != null,
+              onChanged: (value) {
+                if (value == true && latitude != null && longitude != null && address != null) {
                   widget.onLocationSelected(latitude!, longitude!, address!);
                 }
-              : null,
+              },
+            ),
+            const Text('Use this location'),
+          ],
         ),
       ],
     );
