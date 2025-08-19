@@ -2,11 +2,28 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+// ignore: unused_import
+import '../config/api_config.dart';
+
+// Conditional imports for platform-specific functionality
+// ignore: unused_import
+import 'dart:io' if (dart.library.html) 'dart:html' as platform;
 
 class ApiService {
-  static const String baseUrl =
-      'http://10.0.2.2:8000/api'; // For Android emulator
-  // static const String baseUrl = 'http://localhost:8000/api'; // For iOS simulator
+  final String baseUrl;
+
+  ApiService({required this.baseUrl});
+
+  // Factory constructor that automatically uses the correct baseUrl
+  factory ApiService.create() {
+    if (kIsWeb) {
+      // Web environment - use AWS backend
+      return ApiService(baseUrl: '${ApiConfig.baseUrl}/api');
+    } else {
+      // Mobile environment - use local development
+      return ApiService(baseUrl: 'http://10.0.2.2:8000/api');
+    }
+  }
 
   // Profile endpoints
   Future<Map<String, dynamic>> createProfile(

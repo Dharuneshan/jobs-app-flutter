@@ -9,19 +9,27 @@ import 'choose_role_page.dart';
 import '../services/api_service.dart';
 // ignore: duplicate_import
 import '../services/api_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// Firebase Messaging import removed for web compatibility
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../config/api_config.dart';
 
 Future<String?> getDeviceToken() async {
-  return await FirebaseMessaging.instance.getToken();
+  // Web-compatible device token function
+  if (kIsWeb) {
+    // Return a placeholder token for web
+    return 'web-device-token-placeholder';
+  } else {
+    // For mobile, return placeholder for now
+    return 'mobile-device-token-placeholder';
+  }
 }
 
 Future<void> updateDeviceToken(
     String phoneNumber, String deviceToken, bool isEmployer) async {
   final url = isEmployer
-      ? 'http://10.0.2.2:8000/api/employer-registrations/update-device-token/'
-      : 'http://10.0.2.2:8000/api/employee-registrations/update-device-token/';
+      ? '${ApiConfig.baseUrl}/api/employer-registrations/update-device-token/'
+      : '${ApiConfig.baseUrl}/api/employee-registrations/update-device-token/';
   final response = await http.patch(
     Uri.parse(url),
     headers: {'Content-Type': 'application/json'},

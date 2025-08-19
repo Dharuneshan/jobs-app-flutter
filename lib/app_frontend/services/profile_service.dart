@@ -6,6 +6,7 @@ import '../models/profile.dart';
 import '../../services/api_service.dart';
 import 'package:flutter/foundation.dart';
 import '../models/company_certificate.dart';
+import '../../config/api_config.dart';
 
 class ProfileService {
   static final ProfileService _instance = ProfileService._internal();
@@ -13,14 +14,20 @@ class ProfileService {
 
   // Use different base URLs based on platform
   static String get baseUrl {
-    final url = Platform.isAndroid
-        ? 'http://10.0.2.2:8000/api'
-        : 'http://localhost:8000/api';
-    if (kDebugMode) {
-      print('DEBUG: Platform.isAndroid: ${Platform.isAndroid}');
-      print('DEBUG: Using backend URL: $url');
+    if (kIsWeb) {
+      // Web environment - use AWS backend
+      return '${ApiConfig.baseUrl}/api';
+    } else {
+      // Mobile environment - use local development
+      final url = Platform.isAndroid
+          ? 'http://10.0.2.2:8000/api'
+          : 'http://localhost:8000/api';
+      if (kDebugMode) {
+        print('DEBUG: Platform.isAndroid: ${Platform.isAndroid}');
+        print('DEBUG: Using backend URL: $url');
+      }
+      return url;
     }
-    return url;
   }
 
   factory ProfileService() {
@@ -210,10 +217,16 @@ class ProfileService {
 
 class CompanyCertificateService {
   static String get baseUrl {
-    final url = Platform.isAndroid
-        ? 'http://10.0.2.2:8000/api'
-        : 'http://localhost:8000/api';
-    return url;
+    if (kIsWeb) {
+      // Web environment - use AWS backend
+      return '${ApiConfig.baseUrl}/api';
+    } else {
+      // Mobile environment - use local development
+      final url = Platform.isAndroid
+          ? 'http://10.0.2.2:8000/api'
+          : 'http://localhost:8000/api';
+      return url;
+    }
   }
 
   Future<List<CompanyCertificate>> fetchCertificates(int employerId) async {
