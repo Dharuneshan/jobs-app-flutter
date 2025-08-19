@@ -12,17 +12,15 @@ import 'dart:io' if (dart.library.html) 'dart:html' as platform;
 class ApiService {
   final String baseUrl;
 
-  ApiService({required this.baseUrl});
+  // Auto-select baseUrl when not provided
+  ApiService({String? baseUrl})
+      : baseUrl = baseUrl ?? (kIsWeb
+            ? '${ApiConfig.baseUrl}/api'
+            : 'http://10.0.2.2:8000/api');
 
-  // Factory constructor that automatically uses the correct baseUrl
+  // Factory constructor that explicitly uses platform defaults
   factory ApiService.create() {
-    if (kIsWeb) {
-      // Web environment - use AWS backend
-      return ApiService(baseUrl: '${ApiConfig.baseUrl}/api');
-    } else {
-      // Mobile environment - use local development
-      return ApiService(baseUrl: 'http://10.0.2.2:8000/api');
-    }
+    return ApiService();
   }
 
   // Profile endpoints
