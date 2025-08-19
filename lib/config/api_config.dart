@@ -4,11 +4,11 @@ class ApiConfig {
   // Base URL for API calls
   static String get baseUrl {
     if (kIsWeb) {
-      // Web environment - use EC2 Elastic IP
-      return 'http://98.84.239.161';
+      // Web environment - use EC2 Elastic IP over HTTPS
+      return 'https://98.84.239.161';
     } else {
-      // Mobile environment - can be configured for different environments
-      return 'http://98.84.239.161'; // Same for now, can be different for mobile
+      // Mobile environment - same for now; can be different per env
+      return 'https://98.84.239.161';
     }
   }
 

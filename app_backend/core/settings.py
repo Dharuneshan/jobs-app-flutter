@@ -30,7 +30,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.0.2.2']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.0.2.2', '98.84.239.161']
 
 
 # Application definition
@@ -71,10 +71,12 @@ MIDDLEWARE = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Or specify allowed origins:
+# Optionally specify allowed origins (keep wide-open for now due to CORS_ALLOW_ALL_ORIGINS)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://10.0.2.2:8000",
-    # Add your IP if using physical device
+    "https://*.amplifyapp.com",
+    "https://98.84.239.161",
 ]
 
 ROOT_URLCONF = 'core.urls'
