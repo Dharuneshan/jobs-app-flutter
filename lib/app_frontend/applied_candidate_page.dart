@@ -30,7 +30,7 @@ class _AppliedCandidatePageState extends State<AppliedCandidatePage> {
       error = null;
     });
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final data =
           await api.getAppliedCandidates(employerId: widget.employerId);
       setState(() {

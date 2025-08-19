@@ -3,15 +3,15 @@ import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 import '../models/feedback.dart';
+import '../../config/api_config.dart';
+import 'package:flutter/foundation.dart';
 
 class FeedbackService {
   static String get baseUrl {
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:8000/api/employer-feedback/';
-    } else if (Platform.isIOS) {
-      return 'http://localhost:8000/api/employer-feedback/';
+    if (kIsWeb) {
+      return '${ApiConfig.baseUrl}/api/employer-feedback/';
     } else {
-      return 'http://localhost:8000/api/employer-feedback/';
+      return 'http://10.0.2.2:8000/api/employer-feedback/';
     }
   }
 

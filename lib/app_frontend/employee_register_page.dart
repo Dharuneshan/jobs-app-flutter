@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'widgets/map_picker.dart';
 import '../../services/api_service.dart'; // Correct import for ApiService
+import '../../config/api_config.dart';
 
 class EmployeeRegisterPage extends StatefulWidget {
   final String phoneNumber;
@@ -923,8 +924,8 @@ class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
   Future<void> updateDeviceToken(
       String phoneNumber, String deviceToken, bool isEmployer) async {
     final url = isEmployer
-        ? 'http://10.0.2.2:8000/api/employer-registrations/update-device-token/'
-        : 'http://10.0.2.2:8000/api/employee-registrations/update-device-token/';
+        ? '${ApiConfig.baseUrl}/api/employer-registrations/update-device-token/'
+        : '${ApiConfig.baseUrl}/api/employee-registrations/update-device-token/';
     final response = await http.patch(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},

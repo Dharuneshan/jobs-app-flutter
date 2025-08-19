@@ -14,6 +14,7 @@ import 'employee_profile_page.dart';
 import 'package:provider/provider.dart';
 import 'providers/liked_jobs_provider.dart';
 import 'widgets/employee_menu.dart';
+import '../../config/api_config.dart';
 
 class EmployeeLikedPage extends StatefulWidget {
   final int employeeId;
@@ -381,7 +382,7 @@ class _EmployeeLikedPageState extends State<EmployeeLikedPage> {
                   '/employee-applied',
                   arguments: {
                     'employeeId': widget.employeeId,
-                    'baseUrl': 'http://10.0.2.2:8000',
+                    'baseUrl': ApiConfig.baseUrl,
                   },
                 );
               }

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../services/api_service.dart';
 import 'employee_edit_profile_page.dart';
 import 'widgets/employee_menu.dart';
+import '../../config/api_config.dart';
 
 // Color palette
 const Color kPrimaryBlue = Color(0xFF0044CC); // 0044CC
@@ -592,7 +593,7 @@ class _EmployeeProfilePageState extends State<EmployeeProfilePage> {
                   '/employee-applied',
                   arguments: {
                     'employeeId': widget.employeeId,
-                    'baseUrl': 'http://10.0.2.2:8000',
+                    'baseUrl': ApiConfig.baseUrl,
                   },
                 );
               }

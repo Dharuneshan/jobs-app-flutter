@@ -77,7 +77,7 @@ class _EmployerDashboardState extends State<EmployerDashboard>
       isError = false;
     });
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final response = await api.getEmployerByPhone(widget.phoneNumber);
       if (kDebugMode) {
         print('DEBUG: Employer details response: $response');
@@ -122,7 +122,7 @@ class _EmployerDashboardState extends State<EmployerDashboard>
     if (employerId == null) return;
 
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final activeJobPosts =
           await api.getActiveJobPostsForEmployer(employerId!);
 
@@ -143,7 +143,7 @@ class _EmployerDashboardState extends State<EmployerDashboard>
   Future<void> fetchProfileViews() async {
     if (employerId == null) return;
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final count = await api.getProfileViewsForEmployer(employerId!);
       setState(() {
         _profileViews = count;
@@ -189,7 +189,7 @@ class _EmployerDashboardState extends State<EmployerDashboard>
         isPhotoLoading = true;
       });
       try {
-        final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+        final api = APIService.create();
         final employerData = Map<String, dynamic>.from(this.employerData ?? {});
         employerData.remove('photo_url');
         final response = await api.updateEmployerById(
@@ -584,7 +584,7 @@ class _EmployerDashboardState extends State<EmployerDashboard>
       print('DEBUG: employerId: $employerId');
     }
     return FutureBuilder<List<dynamic>>(
-      future: APIService(baseUrl: 'http://10.0.2.2:8000/api').getJobPosts(),
+      future: APIService.create().getJobPosts(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           if (kDebugMode) {
@@ -953,7 +953,7 @@ class _EmployerDashboardState extends State<EmployerDashboard>
             ),
           );
           if (selectedPlan != null && employerId != null) {
-            final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+            final api = APIService.create();
             try {
               if (kDebugMode) {
                 print('DEBUG: Selected plan: $selectedPlan');

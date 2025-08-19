@@ -8,6 +8,7 @@ import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:permission_handler/permission_handler.dart';
+import '../../../config/api_config.dart';
 
 class MapPicker extends StatefulWidget {
   final double? initialLatitude;
@@ -58,7 +59,7 @@ class _MapPickerState extends State<MapPicker> {
     setState(() => isLoading = true);
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/geocode_address/'),
+        Uri.parse('${ApiConfig.baseUrl}/api/geocode_address/'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'address': query}),
       );
@@ -89,7 +90,7 @@ class _MapPickerState extends State<MapPicker> {
     setState(() => isLoading = true);
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/api/reverse_geocode/'),
+        Uri.parse('${ApiConfig.baseUrl}/api/reverse_geocode/'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'latitude': lat, 'longitude': lon}),
       );

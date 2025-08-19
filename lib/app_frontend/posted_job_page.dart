@@ -38,7 +38,7 @@ class _PostedJobPageState extends State<PostedJobPage> {
       isLoading = true;
     });
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
 
       // Fetch employer data for subscription info
       final employerResponse = await api.getEmployerById(widget.employerId);
@@ -106,7 +106,7 @@ class _PostedJobPageState extends State<PostedJobPage> {
 
   Future<void> postDraftJob(JobPost jobPost) async {
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
 
       // Check if employer has job post credits
       final noOfPost = employerData?['no_of_post'] ?? 0;
@@ -140,7 +140,7 @@ class _PostedJobPageState extends State<PostedJobPage> {
 
   Future<void> activateExpiredJob(JobPost jobPost) async {
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
 
       // Check if employer has job post credits
       final noOfPost = employerData?['no_of_post'] ?? 0;

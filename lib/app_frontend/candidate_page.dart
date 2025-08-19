@@ -38,7 +38,7 @@ class _CandidateProfilesPageState extends State<CandidateProfilesPage>
       error = null;
     });
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final data = await api.getCandidateList();
       final viewed =
           await api.getViewedCandidates(employerId: widget.employerId);
@@ -87,7 +87,7 @@ class _CandidateProfilesPageState extends State<CandidateProfilesPage>
 
   Future<void> handleView(int employeeId) async {
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final profile = await api.viewCandidateProfile(
         employerId: widget.employerId,
         employeeId: employeeId,

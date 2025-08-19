@@ -69,7 +69,7 @@ class _ActiveJobPageState extends State<ActiveJobPage> {
   Future<void> _postOrActivateJob(JobStatus status) async {
     setState(() => _isLoading = true);
     try {
-      final api = APIService(baseUrl: 'http://10.0.2.2:8000/api');
+      final api = APIService.create();
       final employerData = await api.getEmployerById(widget.jobPost.employerId);
       final noOfPost = employerData['no_of_post'] ?? 0;
       if (noOfPost <= 0) {

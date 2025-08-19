@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../config/api_config.dart';
 
 // Add this at the top of the file for easy API base URL configuration
-const String apiBaseUrl =
-    'http://10.0.2.2:8000'; // Change to your LAN IP for real device
+String get apiBaseUrl => ApiConfig.baseUrl;
 
 // Add color definitions at the top
 const Color kEmployerPrimary = Color(0xFF0044CC);

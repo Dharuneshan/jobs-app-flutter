@@ -21,6 +21,7 @@ import 'widgets/employee_menu.dart';
 // ignore: unused_import
 import 'dart:math' as math;
 import 'notification_page.dart';
+import '../../config/api_config.dart';
 
 class EmployeeHomePage extends StatefulWidget {
   final int employeeId;
@@ -602,7 +603,7 @@ class _EmployeeHomePageState extends State<EmployeeHomePage>
                   '/employee-applied',
                   arguments: {
                     'employeeId': widget.employeeId,
-                    'baseUrl': 'http://10.0.2.2:8000',
+                    'baseUrl': ApiConfig.baseUrl,
                   },
                 );
               }

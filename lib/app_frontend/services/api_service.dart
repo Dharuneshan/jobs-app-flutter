@@ -11,7 +11,15 @@ import 'dart:io' if (dart.library.html) 'dart:html' as platform;
 class APIService {
   final String baseUrl;
 
-  APIService({required this.baseUrl});
+  APIService({String? baseUrl})
+      : baseUrl = baseUrl ?? (kIsWeb
+            ? '${ApiConfig.baseUrl}/api'
+            : 'http://10.0.2.2:8000/api');
+
+  // Factory constructor that automatically uses the correct baseUrl
+  factory APIService.create() {
+    return APIService();
+  }
 
   // Update employee profile photo
   Future<void> updateEmployeePhoto(int employeeId, dynamic photoFile) async {

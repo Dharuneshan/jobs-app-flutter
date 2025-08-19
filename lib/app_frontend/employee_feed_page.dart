@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'providers/liked_jobs_provider.dart';
 import 'widgets/employee_menu.dart';
 import '../../services/api_service.dart';
+import '../../config/api_config.dart';
 
 class EmployeeFeedPage extends StatefulWidget {
   final int employeeId;
@@ -502,7 +503,7 @@ class _EmployeeFeedPageState extends State<EmployeeFeedPage> {
                   '/employee-applied',
                   arguments: {
                     'employeeId': widget.employeeId,
-                    'baseUrl': 'http://10.0.2.2:8000',
+                    'baseUrl': ApiConfig.baseUrl,
                   },
                 );
               }
